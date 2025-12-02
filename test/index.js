@@ -2,16 +2,16 @@ var assert = require( "assert" );
 var fs = require( "fs" );
 var path = require( "path" );
 var https = require( "https" );
-var gutil = require( "gulp-util" );
+var Vinyl = require( "vinyl" );
 var inline = require( "../" );
 
 var fixture = function ( file ) {
-    var path = __dirname + "/fixtures/" + file;
-    return new gutil.File({
+    var filePath = __dirname + "/fixtures/" + file;
+    return new Vinyl({
         cwd: __dirname,
         base: __dirname + "/fixtures/" + file.substring( 0, file.lastIndexOf( "/" ) ),
-        path: path,
-        contents: fs.readFileSync( path )
+        path: filePath,
+        contents: fs.readFileSync( filePath )
     });
 };
 
@@ -21,7 +21,7 @@ var server = https.createServer({
     rejectUnauthorized: false
 }, function ( req, res ) {
     res.statusCode = 200;
-    res.setHeader( "content-type", "application/font-woff" );
+    res.setHeader( "content-type", "font/woff" );
     fs.createReadStream( __dirname + "/fixtures/font.woff" ).pipe( res );
 }).listen( 8765 );
 
